@@ -14,7 +14,14 @@ const pool = new Pool({
     database: process.env.DB_NAME,
     password: process.env.DB_PASSWORD,
     port: process.env.DB_PORT,
+    ssl: {
+        rejectUnauthorized: false // Allow self-signed certificates
+    }
 });
+
+pool.connect()
+    .then(() => console.log('Database connected successfully'))
+    .catch(err => console.error('Database connection error:', err.message));
 
 app.use(bodyParser.json());
 
@@ -51,3 +58,5 @@ app.get('/api/stocks', async (req, res) => {
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
+
+module.exports = pool;
